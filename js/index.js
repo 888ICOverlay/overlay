@@ -39,15 +39,17 @@ const handleNewFile = (file) => {
 rebuildCanvas = function () {
     console.log("Building canvas...");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const width = (canvas.width = Math.min(inputImg.width, circle.width));
-    const height = (canvas.height = Math.min(inputImg.height, circle.height));
+    isCircleBigger = circle.width > inputImg.width && circle.height > inputImg.width;
+    const width = (canvas.width = isCircleBigger ? inputImg.width: circle.width);
+    const height = (canvas.height = isCircleBigger ? inputImg.height : circle.height);
+    circleSize = Math.min(width, height);
     if(selectedFileName) {
         ctx.drawImage(inputImg, 0, 0, width, height);
     }
-    ctx.drawImage(circle, 0, 0, width, height);
+    ctx.drawImage(circle, 0, 0, circleSize, circleSize);
     ctx.globalCompositeOperation = "destination-in";
     ctx.beginPath();
-    ctx.arc(width / 2, height / 2, height / 2, 0, Math.PI * 2);
+    ctx.arc(circleSize / 2, circleSize / 2, circleSize / 2, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
     console.log("Finished building canvas");
